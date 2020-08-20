@@ -3,5 +3,4 @@
     <string name="error_msg">There was an error. Please try again.</string>
     <string name="error_title">Oops! Sorry!</string>
     <string name="error_button">OK</string>
-    <string name="apiURL"><![CDATA[https://api.openweathermap.org/data/2.5/weather?lat=%1$f&lon=%2$f&appid=%3$s]]></string>
 </resources>
