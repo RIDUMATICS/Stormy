@@ -12,9 +12,18 @@ public class CurrentWeather {
     private double mTemperature;
     private double mHumidity;
     private double mPrecipChance;
+    private String precipType;
     private String mSummary;
     private String mTimeZone;
 
+
+    public String getPrecipType() {
+        return precipType;
+    }
+
+    public void setPrecipType(String precipType) {
+        this.precipType = precipType;
+    }
 
     public String getSummary() {
         return mSummary;
@@ -100,8 +109,8 @@ public class CurrentWeather {
         return timeString;
     }
 
-    public double getTemperature() {
-        return mTemperature;
+    public int getTemperature() {
+        return (int) Math.round(mTemperature);
     }
 
     public void setTemperature(double temperature) {
@@ -116,8 +125,9 @@ public class CurrentWeather {
         mHumidity = humidity;
     }
 
-    public double getPrecipChance() {
-        return mPrecipChance;
+    public int getPrecipChance() {
+        double precipPercentage = mPrecipChance * 100;
+        return (int) Math.round(precipPercentage);
     }
 
     public void setPrecipChance(double precipChance) {
