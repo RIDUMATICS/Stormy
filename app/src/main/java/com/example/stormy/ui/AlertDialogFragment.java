@@ -1,9 +1,11 @@
-package com.example.stormy;
+package com.example.stormy.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+
+import com.example.stormy.R;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
