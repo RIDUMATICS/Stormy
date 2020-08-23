@@ -1,6 +1,7 @@
 package com.example.stormy.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -64,24 +66,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mRefreshImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchData(6.533932, 3.386154);
-            }
-        });
-
         fetchData(6.533932, 3.386154);
     }
 
     private void fetchData(double lat, double lon) {
         String apiKey = getString(R.string.apiKey);
-        String forcastUrl = String.format("https://api.forecast.io/forecast/%1$s/%2$f,%3$f", apiKey, lat, lon);
+        String forecastUrl = String.format("https://api.forecast.io/forecast/%1$s/%2$f,%3$f", apiKey, lat, lon);
 
         if (isNetworkAvailable()) {
             toggleRefresh();
             OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(forcastUrl).build();
+            Request request = new Request.Builder().url(forecastUrl).build();
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
@@ -149,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         mPrecipLabel.setText(currentWeather.getPrecipType());
     }
 
+    @NotNull
     private Forecast parseForecastDetails(String jsonData) throws JSONException {
         Forecast forecast = new Forecast();
 
@@ -159,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
         return forecast;
     }
 
+    @NotNull
     private DailyWeather[] getDailyForecast(String jsonData) throws JSONException {
         JSONObject forecast = new JSONObject(jsonData);
         String timezone = forecast.getString("timezone");
@@ -182,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
         return dailyWeathers;
     }
 
+    @NotNull
     private HourlyWeather[] getHourlyForecast(String jsonData) throws JSONException {
         JSONObject forecast = new JSONObject(jsonData);
         String timezone = forecast.getString("timezone");
@@ -205,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
         return hourlyWeathers;
     }
 
+    @NotNull
     private CurrentWeather getCurrentForecast(String jsonData) throws JSONException {
         JSONObject forecast = new JSONObject(jsonData);
         String timezone = forecast.getString("timezone");
@@ -240,5 +239,33 @@ public class MainActivity extends AppCompatActivity {
     private void alertUserAboutError() {
         AlertDialogFragment dialog = new AlertDialogFragment(MainActivity.this);
         dialog.show(getSupportFragmentManager(), "");
+    }
+
+    @OnClick(R.id.dailyButton)
+    public void startDailyActivity(View view) {
+        Intent intent = new Intent(MainActivity.this, DailyForecastActivity.class);
+        if (mForecast != null) {
+            intent.putExtra(getString(R.string.daily_forecast), mForecast.getDailyWeathers());
+        } else {
+            intent.putExtra(getString(R.string.daily_forecast), new DailyWeather[0]);
+        }
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.refreshImageView)
+    public void reload() {
+        fetchData(6.533932, 3.386154);
+    }
+
+    @OnClick(R.id.hourlyButton)
+    public void startHourlyActivity() {
+        Intent intent = new Intent(MainActivity.this, HourlyForecastActivity.class);
+        if (mForecast != null) {
+            intent.putExtra(getString(R.string.hourly_forecast), mForecast.getHourlyWeathers());
+        } else {
+            intent.putExtra(getString(R.string.hourly_forecast), new HourlyWeather[0]);
+        }
+
+        startActivity(intent);
     }
 }

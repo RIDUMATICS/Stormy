@@ -3,4 +3,7 @@
     <string name="error_msg">There was an error. Please try again.</string>
     <string name="error_title">Oops! Sorry!</string>
     <string name="error_button">OK</string>
+    <string name="there_is_no_data_to_display">There is no data to display.</string>
+    <string name="daily_forecast">DAILY_FORECAST</string>
+    <string name="hourly_forecast">HOURLY_FORECAST</string>
 </resources>
